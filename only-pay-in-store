@@ -1,0 +1,27 @@
+(function () {
+    const TARGET = 'payment-method-payinstore';
+
+    function hideOtherPaymentMethods() {
+        const methods = document.querySelectorAll('[data-test^="payment-method-"]');
+        if (!methods.length) return false;
+
+        methods.forEach((method) => {
+            const id = method.getAttribute('data-test');
+            method.style.display = (id === TARGET) ? '' : 'none';
+        });
+
+        return true;
+    }
+
+    let attempts = 0;
+    const maxAttempts = 20;
+
+    function tryHide() {
+        const success = hideOtherPaymentMethods();
+        if (!success && attempts++ < maxAttempts) {
+            setTimeout(tryHide, 500);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', tryHide);
+})();
